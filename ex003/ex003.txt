@@ -1,0 +1,52 @@
+/*Criação da base de dados e tabelas*/
+CREATE DATABASE empresa;
+use empresa;
+
+CREATE TABLE clientes(id_cliente BIGINT PRIMARY KEY NOT NULL, nome VARCHAR(50) NOT NULL);
+
+CREATE TABLE pedidos(id_pedido BIGINT PRIMARY KEY NOT NULL, id_cliente BIGINT NOT NULL);
+
+/*Alteração na coluna id_cliente da tabela pedidos para funcionar como foreign key e aplicação do ON DELETE CASCADE*/
+ALTER TABLE pedidos ADD CONSTRAINT fk_cliente foreign key(id_cliente) references clientes (id_cliente) ON DELETE CASCADE;
+
+/*Inserção de valores na tabela clientes*/
+INSERT INTO clientes VALUES(22100069, "raphael");
+
+/*Inserção de valores na tabela de pedidos*/
+INSERT INTO pedidos VALUES(101213, 22100069);
+
+/*Excluindo da tabela clientes*/
+DELETE FROM clientes WHERE id_cliente = 22100069;
+
+/*RESULTADO:
+SELECT * FROM clientes;
+Empty set (0.00 sec)
+
+SELECT * FROM pedidos;
+Empty set (0.00 sec)*/
+
+
+/*Criando a tabela de vendedores*/
+CREATE TABLE vendedores(id_vendedor BIGINT PRIMARY KEY NOT NULL , nome VARCHAR(30) NOT NULL);
+
+/*Alterando pedidos para receber uma fk id_vededor com ON DELETE SET NULL*/
+ALTER TABLE pedidos ADD COLUMN id_vendedor BIGINT;
+
+ALTER TABLE pedidos ADD CONSTRAINT fk_vendedor foreign key(id_vendedor) references vendedores (id_vendedor) ON DELETE SET NULL;
+
+/*Inserindo dados em vendedores*/
+INSERT INTO clientes VALUES(22100069, "raphael");
+INSERT INTO vendedores VALUES (1022, "marcos");
+INSERT INTO pedidos VALUES(121314, 22100069, 1022);
+
+/*Deletando de vendedores*/
+DELETE FROM vendedores WHERE id_vendedor = 1022;
+
+/*VERIFICAÇÃO:
+SELECT * FROM pedidos;
++-----------+------------+-------------+
+| id_pedido | id_cliente | id_vendedor |                   
++-----------+------------+-------------+
+|    121314 |   22100069 |  NULL       |
++-----------+------------+-------------+
+*/
